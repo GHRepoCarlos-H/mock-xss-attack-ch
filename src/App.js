@@ -1,25 +1,78 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import Task from "./Task"
 
-function App() {
+
+const App = () => {
+  const [tasks] = useState([
+    {
+      text: "go to the bank",
+      image: "https://placekitten.com/g/200/300"
+    },
+    {
+      text: "Never stop killing it",
+      image: "https://images.pexels.com/photos/5721097/pexels-photo-5721097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
+  ]);
+  const [task, setTask] = useState({
+    text: "",
+    image: ""
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    if (task.text || task.image) {
+      tasks.push({
+        text: task.text,
+        image: task.image
+      })
+      setTask({
+        text: "",
+        image: ""
+      });
+      // Launch first attack here
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+
+      <form onSubmit={handleSubmit}>
+        <label>
+          What do you need to get done?
+        </label>
+        <br />
+        <textarea
+          value={task.text}
+          onChange={e => setTask({ ...task, text: e.target.value })}
+          defaultValue="Add a new task!"
+        />
+        <br />
+        <label>
+          Add an image to your task!
+        </label>
+        <br />
+        <input
+          value={task.image}
+          onChange={e => setTask({ ...task, image: e.target.value })}
+          defaultValue="Add an image!"
+        />
+        <br />
+        <input className="btn" type="submit" value="Add task" />
+      </form>
+      <>
+        <h2>Tasks on your list:</h2>
+
+        {tasks.map((task, index) => (
+          <Task
+            text={task.text}
+            image={task.image}
+            index={index}
+          />
+        ))}
+      </>
+      {/* Launch second attack here. */}
+    </>
+  )
 }
 
-export default App;
+export default App
